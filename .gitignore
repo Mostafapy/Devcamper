@@ -10,6 +10,7 @@ lerna-debug.log*
 
 node_modules/
 .env
+config.env
 package-lock.json
 
 # Optional npm cache directory
