@@ -53,7 +53,7 @@ module.exports = {
       'linebreak-style': [0],
       'prefer-destructuring': ['error', { object: true, array: false }],
 
-      'indent': ['error', 3],
+      indent: ['error', 3],
       // ### Debugging is allowed but not allowed to commit ###
       'no-console': 'warn', // # airbnb default: 'error'
       'no-debugger': 'warn', // # airbnb default: 'error'
