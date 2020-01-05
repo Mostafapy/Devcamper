@@ -5,7 +5,7 @@ module.exports = {
 
   extends: ['plugin:prettier/recommended', 'airbnb-base'],
 
-  plugins: ['prettier'],
+  plugins: ['prettier', 'mocha'],
 
   env: {
     es6: true,
@@ -42,5 +42,14 @@ module.exports = {
       { functions: false, classes: false, variables: true },
     ],
     'no-undef': 'error',
+
+    'no-unused-vars': ['error'],
+
+    // ### Debugging is allowed but not allowed to commit ###
+    'no-console': 'warn', // # airbnb default: 'error'
+    'no-debugger': 'warn', // # airbnb default: 'error'
+
+    // a rule for mocha test runner
+    'mocha/no-exclusive-tests': 'error',
   },
 };
