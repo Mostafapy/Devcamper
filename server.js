@@ -4,6 +4,10 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const logger = require('./utils/logger')('Server');
+
+// Routes
+const routes = require('./routes/index');
+
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -43,6 +47,8 @@ process.on('unhandledRejection', ex => {
    process.exit(1);
 });
 
+// Mount the routes
+app.use(routes);
 // Port
 const port = process.env.PORT || '3000';
 
