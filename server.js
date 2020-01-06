@@ -2,6 +2,7 @@ require('colors');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const logger = require('./utils/logger')('Server');
 
@@ -19,21 +20,29 @@ connectDB();
 
 const app = express();
 
-app.use(express.json());
-
-morgan((tokens, req, res) =>
-   [
-      `<${process.env.NODE_ENV}>`,
-      tokens.method(req, res),
-      tokens.url(req, res),
-      tokens.status(req, res),
-      tokens.res(req, res, 'content-length'),
-      '-',
-      tokens['response-time'](req, res),
-      'ms',
-   ].join(' '),
+app.use(bodyParser.json());
+app.use(
+   bodyParser.urlencoded({
+      extended: false,
+   }),
 );
 
+if (process.env.NODE_ENV === 'development') {
+   app.use(
+      morgan((tokens, req, res) =>
+         [
+            `<${process.env.NODE_ENV}>`,
+            tokens.method(req, res),
+            tokens.url(req, res),
+            tokens.status(req, res),
+            tokens.res(req, res, 'content-length'),
+            '-',
+            tokens['response-time'](req, res),
+            'ms',
+         ].join(' '),
+      ),
+   );
+}
 // Mount the routes
 app.use(routes);
 // Port
