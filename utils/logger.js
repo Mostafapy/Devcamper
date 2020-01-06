@@ -1,3 +1,4 @@
+require('colors');
 const util = require('util');
 const { createLogger, format, transports } = require('winston');
 
@@ -5,7 +6,8 @@ const { combine, timestamp, printf } = format;
 
 const customFormat = printf(
    ({ message, moduleName, timestamp }) =>
-      `${timestamp} [${moduleName}] [${process.env.NODE_ENV}]: ${message}`,
+      `${timestamp} [${moduleName}] [${process.env.NODE_ENV}]: ${message}`
+         .magenta,
 );
 
 const winstonLogger = createLogger({

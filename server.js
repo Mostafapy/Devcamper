@@ -1,3 +1,4 @@
+require('colors');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -47,12 +48,12 @@ const port = process.env.PORT || '3000';
 
 // Listen
 const server = app.listen(port, () =>
-   logger.log(`App Listen Successfully To Port ${port}`),
+   logger.log(`App Listen Successfully To Port ${port}`.yellow.bold),
 );
 
 // Unhandled Promise Rejection Handler
 process.on('unhandledRejection', ex => {
-   logger.error(ex.message, ex);
+   logger.error(`${ex.message}`.red, ex);
    app.use((_req, res) => {
       res.status(500).json({
          err: true,
