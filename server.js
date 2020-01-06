@@ -2,7 +2,6 @@ require('colors');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 
 const logger = require('./utils/logger')('Server');
 
@@ -20,12 +19,7 @@ connectDB();
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(
-   bodyParser.urlencoded({
-      extended: false,
-   }),
-);
+app.use(express.json());
 
 if (process.env.NODE_ENV === 'development') {
    app.use(
