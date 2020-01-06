@@ -2,7 +2,6 @@ require('colors');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 
 const logger = require('./utils/logger')('Server');
 
@@ -20,13 +19,7 @@ connectDB();
 
 const app = express();
 
-app.use(bodyParser.json());
-
-app.use(
-   bodyParser.urlencoded({
-      extended: false,
-   }),
-);
+app.use(express.json());
 
 morgan((tokens, req, res) =>
    [
@@ -56,7 +49,7 @@ process.on('unhandledRejection', ex => {
    logger.error(`${ex.message}`.red, ex);
    app.use((_req, res) => {
       res.status(500).json({
-         err: true,
+         success: false,
          msg: '500 Internet Error',
          data: null,
       });
