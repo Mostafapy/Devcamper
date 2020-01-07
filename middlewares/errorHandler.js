@@ -6,6 +6,7 @@ const errorHandler = (err, req, res, next) => {
 
    customError.message = err.message;
 
+   // Mongoose bad ObjectId
    if (err.name === 'CastError') {
       customError = {};
 
@@ -14,6 +15,29 @@ const errorHandler = (err, req, res, next) => {
       const message = `Bootcamp not found with id of ${err.value}`;
 
       customError = new ErrorResposne(message, 404, logger, loggerMessage);
+   }
+
+   // Mongoose Duplicate Key Error
+   if (err.code === 11000) {
+      customError = {};
+
+      const { logger, loggerMessage } = err.loggerObject;
+
+      const message = 'Duplicate field value entered';
+
+      customError = new ErrorResposne(message, 400, logger, loggerMessage);
+   }
+
+   // Mongoose Validation error
+   if (err.name === 'ValidationError') {
+      customError = {};
+
+      const { logger, loggerMessage } = err.loggerObject;
+
+      // eslint-disable-next-line implicit-arrow-linebreak
+      const message = Object.values(err.errors).map(val => val.message);
+
+      customError = new ErrorResposne(message, 400, logger, loggerMessage);
    }
 
    const { logger, loggerMessage } = customError.loggerObject;
