@@ -1,4 +1,5 @@
 const BootcampModel = require('./../models/Bootcamp');
+const ErrorResponse = require('./../utils/errorResponse');
 const logger = require('./../utils/logger')('Controllers:BootcampsController');
 // @desc Get all bootcamps
 // @route GET /api/v1/bootcamps
@@ -13,7 +14,7 @@ const getBootcamps = async (_req, res) => {
          data: bootcamps,
       });
    } catch (err) {
-      logger.error('@getBootcamps [error: %0]'.red, err.message);
+      logger.error('@getBootcamps() [error: %0]'.red, err.message);
 
       res.status(400).json({
          success: false,
@@ -24,15 +25,20 @@ const getBootcamps = async (_req, res) => {
 // @desc Get a single bootcamps by id
 // @route GET /api/v1/bootcamps/:id
 // @access Public
-const getBootcampById = async (req, res) => {
+const getBootcampById = async (req, res, next) => {
    try {
       const bootcamp = await BootcampModel.findById(req.params.id);
 
       // bootcamp doesn't exist
       if (!bootcamp) {
-         res.status(400).json({
-            success: false,
-         });
+         return next(
+            new ErrorResponse(
+               `Bootcamp not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@getBootcampById',
+            ),
+         );
       }
 
       res.status(200).json({
@@ -40,11 +46,12 @@ const getBootcampById = async (req, res) => {
          data: bootcamp,
       });
    } catch (err) {
-      logger.error('@getBootcampById [error: %0]'.red, err.message);
+      err.loggerObject = {
+         logger,
+         loggerMessage: 'getBootcampById() [error: %0]'.red,
+      };
 
-      res.status(400).json({
-         success: false,
-      });
+      next(err);
    }
 };
 
@@ -60,7 +67,7 @@ const createBootcamp = async (req, res) => {
          data: newBootcamp,
       });
    } catch (err) {
-      logger.error('@createBootcamp [error: %0]'.red, err.message);
+      logger.error('@createBootcamp() [error: %0]'.red, err.message);
 
       res.status(400).json({
          success: false,
@@ -94,7 +101,7 @@ const updateBootcampById = async (req, res) => {
          data: bootcamp,
       });
    } catch (err) {
-      logger.error('@updateBootcampById [error: %0]'.red, err.message);
+      logger.error('@updateBootcampById() [error: %0]'.red, err.message);
 
       res.status(400).json({
          success: false,
