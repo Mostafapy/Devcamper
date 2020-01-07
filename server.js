@@ -11,6 +11,9 @@ const connectDB = require('./config/db');
 // Routes
 const routes = require('./routes/index');
 
+// Error Handling Middleware
+const errorHandler = require('./middlewares/errorHandler');
+
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -39,6 +42,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 // Mount the routes
 app.use(routes);
+
+// Error Handler
+app.use(errorHandler);
+
 // Port
 const port = process.env.PORT || '3000';
 
