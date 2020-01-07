@@ -14,7 +14,7 @@ const getBootcamps = async (_req, res) => {
          data: bootcamps,
       });
    } catch (err) {
-      logger.error('@getBootcamps() [error: %0]'.red, err.message);
+      logger.error('@getBootcamps() [error: %s]'.red, err.message);
 
       res.status(400).json({
          success: false,
@@ -36,7 +36,7 @@ const getBootcampById = async (req, res, next) => {
                `Bootcamp not found with id of ${req.params.id}`,
                404,
                logger,
-               '@getBootcampById() [error: %0]'.red,
+               '@getBootcampById() [error: %s]'.red,
             ),
          );
       }
@@ -48,7 +48,7 @@ const getBootcampById = async (req, res, next) => {
    } catch (err) {
       err.loggerObject = {
          logger,
-         loggerMessage: '@getBootcampById() [error: %0]'.red,
+         loggerMessage: '@getBootcampById() [error: %s]'.red,
       };
 
       next(err);
@@ -69,7 +69,7 @@ const createBootcamp = async (req, res, next) => {
    } catch (err) {
       err.loggerObject = {
          logger,
-         loggerMessage: '@createBootcamp() [error: %0]'.red,
+         loggerMessage: '@createBootcamp() [error: %s]'.red,
       };
 
       next(err);
@@ -97,7 +97,7 @@ const updateBootcampById = async (req, res, next) => {
                `Bootcamp not found with id of ${req.params.id}`,
                404,
                logger,
-               '@updateBootcampById() [error: %0]'.red,
+               '@updateBootcampById() [error: %s]'.red,
             ),
          );
       }
@@ -109,7 +109,7 @@ const updateBootcampById = async (req, res, next) => {
    } catch (err) {
       err.loggerObject = {
          logger,
-         loggerMessage: '@updateBootcampById() [error: %0]'.red,
+         loggerMessage: '@updateBootcampById() [error: %s]'.red,
       };
 
       next(err);
@@ -130,7 +130,7 @@ const deleteBootcampById = async (req, res, next) => {
                `Bootcamp not found with id of ${req.params.id}`,
                404,
                logger,
-               '@deleteBootcampById() [error: %0]'.red,
+               '@deleteBootcampById() [error: %s]'.red,
             ),
          );
       }
@@ -142,7 +142,7 @@ const deleteBootcampById = async (req, res, next) => {
    } catch (err) {
       err.loggerObject = {
          logger,
-         loggerMessage: '@deleteBootcampById() [error: %0]'.red,
+         loggerMessage: '@deleteBootcampById() [error: %s]'.red,
       };
 
       next(err);
