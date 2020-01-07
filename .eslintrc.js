@@ -3,6 +3,8 @@ module.exports = {
 
    plugins: ['prettier', 'mocha'],
 
+   parser: 'babel-eslint',
+
    parserOptions: {
       ecmaVersion: 2017,
    },
