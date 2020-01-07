@@ -36,7 +36,7 @@ const getBootcampById = async (req, res, next) => {
                `Bootcamp not found with id of ${req.params.id}`,
                404,
                logger,
-               '@getBootcampById',
+               '@getBootcampById() [error: %0]'.red,
             ),
          );
       }
@@ -48,7 +48,7 @@ const getBootcampById = async (req, res, next) => {
    } catch (err) {
       err.loggerObject = {
          logger,
-         loggerMessage: 'getBootcampById() [error: %0]'.red,
+         loggerMessage: '@getBootcampById() [error: %0]'.red,
       };
 
       next(err);
@@ -58,7 +58,7 @@ const getBootcampById = async (req, res, next) => {
 // @desc Create new bootcamp
 // @route POST /api/v1/bootcamps
 // @access Private
-const createBootcamp = async (req, res) => {
+const createBootcamp = async (req, res, next) => {
    try {
       const newBootcamp = await BootcampModel.create(req.body);
 
@@ -67,18 +67,19 @@ const createBootcamp = async (req, res) => {
          data: newBootcamp,
       });
    } catch (err) {
-      logger.error('@createBootcamp() [error: %0]'.red, err.message);
+      err.loggerObject = {
+         logger,
+         loggerMessage: '@createBootcamp() [error: %0]'.red,
+      };
 
-      res.status(400).json({
-         success: false,
-      });
+      next(err);
    }
 };
 
 // @desc Update a single bootcamp by id
 // @route PUT /api/v1/bootcamps/:id
 // @access Private
-const updateBootcampById = async (req, res) => {
+const updateBootcampById = async (req, res, next) => {
    try {
       const bootcamp = await BootcampModel.findByIdAndUpdate(
          req.params.id,
@@ -91,9 +92,14 @@ const updateBootcampById = async (req, res) => {
 
       // bootcamp doesn't exist
       if (!bootcamp) {
-         res.status(400).json({
-            success: false,
-         });
+         return next(
+            new ErrorResponse(
+               `Bootcamp not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@updateBootcampById() [error: %0]'.red,
+            ),
+         );
       }
 
       res.status(200).json({
@@ -101,26 +107,32 @@ const updateBootcampById = async (req, res) => {
          data: bootcamp,
       });
    } catch (err) {
-      logger.error('@updateBootcampById() [error: %0]'.red, err.message);
+      err.loggerObject = {
+         logger,
+         loggerMessage: '@updateBootcampById() [error: %0]'.red,
+      };
 
-      res.status(400).json({
-         success: false,
-      });
+      next(err);
    }
 };
 
 // @desc Delete a single bootcamp by id
 // @route DELETE /api/v1/bootcamps/:id
 // @access Private
-const deleteBootcampById = async (req, res) => {
+const deleteBootcampById = async (req, res, next) => {
    try {
       const bootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
 
       // bootcamp doesn't exist
       if (!bootcamp) {
-         res.status(400).json({
-            success: false,
-         });
+         return next(
+            new ErrorResponse(
+               `Bootcamp not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@deleteBootcampById() [error: %0]'.red,
+            ),
+         );
       }
 
       res.status(200).json({
@@ -128,11 +140,12 @@ const deleteBootcampById = async (req, res) => {
          data: {},
       });
    } catch (err) {
-      logger.error('@deleteBootcampById() [error: %0]'.red, err.message);
+      err.loggerObject = {
+         logger,
+         loggerMessage: '@deleteBootcampById() [error: %0]'.red,
+      };
 
-      res.status(400).json({
-         success: false,
-      });
+      next(err);
    }
 };
 
