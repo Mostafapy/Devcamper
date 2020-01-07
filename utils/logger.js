@@ -43,7 +43,7 @@ module.exports = moduleName => {
    logger.error = (message, object = null) => {
       if (object) {
          childLogger.error(
-            util.formatWithOptions({ colors: true }, `${message} %O`, object),
+            util.formatWithOptions({ colors: true }, `${message}`, object),
          );
       } else {
          childLogger.error(message);
