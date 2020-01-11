@@ -62,6 +62,7 @@ module.exports = {
       'no-debugger': 'warn', // # airbnb default: 'error'
 
       'implicit-arrow-linebreak': ['error', 'below'],
+      'space-before-function-paren': ['error', 'never'],
       'arrow-parens': ['error', 'as-needed'],
       // a rule for mocha test runner
       'mocha/no-exclusive-tests': 'error',
