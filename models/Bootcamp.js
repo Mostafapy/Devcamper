@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
+const createSlugifyFromName = require('./../middlewares/createSlugify');
 
 const BootcampSchema = new mongoose.Schema(
    {
@@ -110,5 +111,8 @@ const BootcampSchema = new mongoose.Schema(
       toObject: { virtuals: true },
    },
 );
+
+// Create bootcamp slug from the name
+createSlugifyFromName(BootcampSchema);
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
