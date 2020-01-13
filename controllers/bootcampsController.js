@@ -1,3 +1,4 @@
+require('colors');
 const BootcampModel = require('./../models/Bootcamp');
 const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
