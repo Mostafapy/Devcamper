@@ -15,7 +15,7 @@ const createGeocodeLocation = modelSchema => {
          city: loc[0].city,
          state: loc[0].stateCode,
          zipcode: loc[0].zipcode,
-         country: loc[0].country,
+         country: loc[0].countryCode,
       };
 
       // Do not save address in DB
