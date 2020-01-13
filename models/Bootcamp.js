@@ -1,6 +1,12 @@
 /* eslint-disable no-useless-escape */
+require('colors');
 const mongoose = require('mongoose');
 const createSlugifyFromName = require('./../middlewares/createSlugify');
+const createGeocodeLocation = require('./../middlewares/goecoderLocationHandler');
+
+const asyncHandler = require('./../middlewares/asyncHandler');
+
+const logger = require('./../utils/logger')('Models:BootcampsController');
 
 const BootcampSchema = new mongoose.Schema(
    {
@@ -114,5 +120,12 @@ const BootcampSchema = new mongoose.Schema(
 
 // Create bootcamp slug from the name
 createSlugifyFromName(BootcampSchema);
+
+// Geocode & create location field
+asyncHandler(
+   createGeocodeLocation(BootcampSchema),
+   logger,
+   '@createGeocodeLocation() [error: %s]'.red,
+);
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
