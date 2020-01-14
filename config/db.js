@@ -1,5 +1,6 @@
 require('colors');
 const mongoose = require('mongoose');
+const mongoDBConnectionHelper = require('./../helpers/mongoDBConnection');
 const logger = require('./../utils/logger')('Config:DB');
 
 const connectDB = async () => {
@@ -38,12 +39,9 @@ const connectDB = async () => {
    });
 
    try {
-      await mongoose.connect(process.env.MONGO_URI, {
-         useNewUrlParser: true,
-         useCreateIndex: true,
-         useFindAndModify: false,
-         useUnifiedTopology: true,
-      });
+      // Connect mongo DB
+      await mongoDBConnectionHelper();
+
       logger.log('Successfully connected to mongoDB'.green.underline.bold);
    } catch (err) {
       logger.error(
