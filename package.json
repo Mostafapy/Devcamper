@@ -7,6 +7,8 @@
       "test": "mocha ./test/**.spec.js --exit",
       "start": "NODE_ENV=production node server",
       "dev": "nodemon server",
+      "seed-import": "node seeder -i",
+      "seed-delete": "node seeder -d",
       "pre-commit": "npm run prettier && lint-staged",
       "prettier": "prettier --single-quote true --trailing-comma  all --tab-width 3  --write \"./**/*.{js,json}\""
    },
