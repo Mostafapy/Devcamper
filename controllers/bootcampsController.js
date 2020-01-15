@@ -10,8 +10,32 @@ const logger = require('./../utils/logger')('Controllers:BootcampsController');
 // @route GET /api/v1/bootcamps
 // @access Public
 const getBootcamps = asyncHandler(
-   async (_req, res) => {
-      const bootcamps = await BootcampModel.find();
+   async (req, res) => {
+      // Copy req.query
+      const reqQuery = { ...req.query };
+
+      // Fields to exclude
+      const removeFields = ['select'];
+
+      // Loop over removeFields array and delete them from reqQuery
+      // eslint-disable-next-line implicit-arrow-linebreak
+      removeFields.forEach(param => delete reqQuery[param]);
+
+      // Create query string
+      let queryStr = JSON.stringify(reqQuery);
+
+      // Create operator (gt, gte, etc)
+      queryStr = queryStr.replace(
+         /\b(gt|gte|lt|lte|in)\b/g,
+         // eslint-disable-next-line implicit-arrow-linebreak
+         match => `${match}`,
+      );
+
+      // Finding resources
+      const query = BootcampModel.find(JSON.parse(queryStr));
+
+      // Executing query
+      const bootcamps = await query;
 
       res.status(200).json({
          success: true,
