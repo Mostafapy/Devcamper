@@ -11,6 +11,7 @@ dotenv.config({ path: './config/config.env' });
 
 // Load models
 const BootcampModel = require('./models/Bootcamp');
+const CourseModel = require('./models/Course');
 
 // Connect MongoDB
 mongoDBConnectionHelper().catch(err => {
@@ -37,7 +38,11 @@ const importData = async () => {
          `${__dirname}/_data/bootcamps.json`,
       );
 
+      const courses = await readJsonFiles(`${__dirname}/_data/courses.json`);
+
       await BootcampModel.create(bootcamps);
+
+      await CourseModel.create(courses);
 
       logger.log('Data imported Successfully'.green.inverse);
 
@@ -51,6 +56,7 @@ const importData = async () => {
 const deleteData = async () => {
    try {
       await BootcampModel.deleteMany();
+      await CourseModel.deleteMany();
 
       logger.log('Data destroyed Successfully'.green.inverse);
 
