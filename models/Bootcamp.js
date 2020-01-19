@@ -1,7 +1,13 @@
 /* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
+
+/* Middlewares */
 const createSlugifyFromName = require('./../middlewares/createSlugify');
 const createGeocodeLocation = require('./../middlewares/geocoderLocationHandler');
+const cascadeDelete = require('./../middlewares/cascadeDelete');
+
+/* Helper Functions */
+const reversePopulate = require('./../helpers/reversePopulateWithVirtuals');
 
 const BootcampSchema = new mongoose.Schema(
    {
@@ -118,5 +124,13 @@ createSlugifyFromName(BootcampSchema);
 
 // Geocode & create location field
 createGeocodeLocation(BootcampSchema);
+
+// Cascade delete courses when bootcamp is deleted
+cascadeDelete(BootcampSchema, 'Course', 'bootcamp');
+
+// Reverse populate with virtuals
+reversePopulate(BootcampSchema, 'courses', 'Course', 'bootcamp', {
+   JustOne: false,
+});
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
