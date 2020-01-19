@@ -1,6 +1,9 @@
 require('colors');
+/* Models */
 const CourseModel = require('./../models/Course');
-// const ErrorResponse = require('./../utils/errorResponse');
+const BootcampModel = require('../models/Bootcamp');
+
+const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
 
 const logger = require('./../utils/logger')('Controllers:CoursesController');
@@ -35,6 +38,71 @@ const getCourses = asyncHandler(
    '@getCourses() [error: %s]'.red,
 );
 
+// @desc Get a single course by Id
+// @route GET /api/v1/courses/:id
+// @access Public
+const getCourseById = asyncHandler(
+   async (req, res, next) => {
+      const course = CourseModel.findById(req.params.id).populate({
+         path: 'bootcamp',
+         select: 'name description',
+      });
+
+      // course doesn't exist
+      if (!course) {
+         return next(
+            new ErrorResponse(
+               `course not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@getCourseById() [error: %s]'.red,
+            ),
+         );
+      }
+
+      res.status(200).json({
+         success: true,
+         data: course,
+      });
+   },
+   logger,
+   '@getCourses() [error: %s]'.red,
+);
+
+// @desc Add new course
+// @route POST /api/v1/bootcamps/:bootcampId/courses
+// @access Private
+const addCourse = asyncHandler(
+   async (req, res, next) => {
+      req.body.bootcamp = req.params.bootcampId;
+
+      const bootcamp = BootcampModel.findById(req.params.bootcampId);
+
+      // bootcamp doesn't exist
+      if (!bootcamp) {
+         return next(
+            new ErrorResponse(
+               `bootcamp not found with id of ${req.params.bootcampId}`,
+               404,
+               logger,
+               '@addCourse() [error: %s]'.red,
+            ),
+         );
+      }
+
+      const newCourse = await CourseModel.create(req.body);
+
+      res.status(201).json({
+         success: true,
+         data: newCourse,
+      });
+   },
+   logger,
+   '@createBootcamp() [error: %s]'.red,
+);
+
 module.exports = {
    getCourses,
+   getCourseById,
+   addCourse,
 };
