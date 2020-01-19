@@ -32,7 +32,7 @@ const getBootcamps = asyncHandler(
       );
 
       // Finding resources
-      let query = BootcampModel.find(JSON.parse(queryStr));
+      let query = BootcampModel.find(JSON.parse(queryStr)).populate('courses');
 
       // Select Fields
       if (req.query.select) {
@@ -173,7 +173,7 @@ const updateBootcampById = asyncHandler(
 // @access Private
 const deleteBootcampById = asyncHandler(
    async (req, res, next) => {
-      const bootcamp = await BootcampModel.findByIdAndDelete(req.params.id);
+      const bootcamp = await BootcampModel.findById(req.params.id);
 
       // bootcamp doesn't exist
       if (!bootcamp) {
@@ -186,6 +186,8 @@ const deleteBootcampById = asyncHandler(
             ),
          );
       }
+
+      bootcamp.remove();
 
       res.status(200).json({
          success: true,
