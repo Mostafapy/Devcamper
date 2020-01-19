@@ -1,5 +1,9 @@
 const geocoder = require('../utils/geocoder');
 
+/**
+ * Middleware to goecode location field in mongoDB collections
+ * @param {Object} modelSchema
+ */
 const createGeocodeLocation = modelSchema => {
    // eslint-disable-next-line func-names
    modelSchema.pre('save', async function(next) {

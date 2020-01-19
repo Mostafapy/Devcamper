@@ -1,5 +1,11 @@
 const ErrorResposne = require('./../utils/errorResponse');
-
+/**
+ * Middleware to handle errors of Asynchronous
+ * @param err
+ * @param req
+ * @param res
+ * @param next
+ */
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
    let customError = { ...err };

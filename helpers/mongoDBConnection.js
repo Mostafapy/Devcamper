@@ -1,6 +1,10 @@
 /* eslint-disable implicit-arrow-linebreak */
 const mongoose = require('mongoose');
 
+/**
+ * Helper Function to establish a connection to mongo DB
+ * @returns {Promise || Error}
+ */
 const mongooseConnection = () =>
    new Promise((resolve, reject) => {
       mongoose
