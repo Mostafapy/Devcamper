@@ -101,8 +101,73 @@ const addCourse = asyncHandler(
    '@createBootcamp() [error: %s]'.red,
 );
 
+// @desc Update course by id
+// @route PUT /api/v1/courses/:id
+// @access Private
+const updateCourseById = asyncHandler(
+   async (req, res, next) => {
+      let course = CourseModel.findById(req.params.id);
+
+      // bootcamp doesn't exist
+      if (!course) {
+         return next(
+            new ErrorResponse(
+               `course not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@updateCourseById() [error: %s]'.red,
+            ),
+         );
+      }
+
+      course = await CourseModel.findByIdAndUpdate(req.params.id, req.body, {
+         new: true,
+         runValidators: true,
+      });
+
+      res.status(200).json({
+         success: true,
+         data: course,
+      });
+   },
+   logger,
+   '@updateCourseById() [error: %s]'.red,
+);
+
+// @desc Delete course by id
+// @route PUT /api/v1/courses/:id
+// @access Private
+const deleteCourseById = asyncHandler(
+   async (req, res, next) => {
+      const course = CourseModel.findById(req.params.id);
+
+      // bootcamp doesn't exist
+      if (!course) {
+         return next(
+            new ErrorResponse(
+               `course not found with id of ${req.params.id}`,
+               404,
+               logger,
+               '@deleteCourseById() [error: %s]'.red,
+            ),
+         );
+      }
+
+      await course.remove();
+
+      res.status(200).json({
+         success: true,
+         data: course,
+      });
+   },
+   logger,
+   '@deleteCourseById() [error: %s]'.red,
+);
+
 module.exports = {
    getCourses,
    getCourseById,
    addCourse,
+   updateCourseById,
+   deleteCourseById,
 };
