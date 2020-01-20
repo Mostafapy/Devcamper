@@ -1,4 +1,10 @@
+/* eslint-disable prefer-arrow-callback */
+require('colors');
 const mongoose = require('mongoose');
+
+const logger = require('./../utils/logger')('Models:Course');
+
+const getAverageCostOfCourse = require('../helpers/getAverageCostOfCourse');
 
 const CourseSchema = new mongoose.Schema({
    title: {
@@ -35,6 +41,30 @@ const CourseSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: 'Bootcamp',
    },
+});
+
+// Static method to get avg of tuitions
+// eslint-disable-next-line func-names
+CourseSchema.statics.getAverageCost = async function(bootcampId) {
+   const obj = await getAverageCostOfCourse(bootcampId);
+   try {
+      await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+         averageCost: Math.ceil(obj[0].averageCost / 10) * 10,
+      });
+   } catch (err) {
+      logger.error('@getAverageCost() [error: %s]'.red, err.message);
+   }
+};
+// Call getAverageCost after save
+// eslint-disable-next-line func-names
+CourseSchema.post('save', function() {
+   this.constructor.getAverageCost(this.bootcamp);
+});
+
+// Call getAverageCost before remove
+// eslint-disable-next-line func-names
+CourseSchema.post('save', function() {
+   this.constructor.getAverageCost(this.bootcamp);
 });
 
 module.exports = mongoose.model('Course', CourseSchema);
