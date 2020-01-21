@@ -1,7 +1,9 @@
 require('colors');
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const fileupload = require('express-fileupload');
 
 const logger = require('./utils/logger')('Server');
 
@@ -40,6 +42,13 @@ if (process.env.NODE_ENV === 'development') {
       ),
    );
 }
+
+// File Upload
+app.use(fileupload());
+
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Mount the routes
 app.use(routes);
 
