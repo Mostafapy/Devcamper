@@ -13,6 +13,10 @@ node_modules/
 config/config.env
 package-lock.json
 
+# File Upload ignore
+!public/uploads/.gitkeep
+public/uploads/*
+
 # Optional npm cache directory
 .npm
 
