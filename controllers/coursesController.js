@@ -15,24 +15,18 @@ const logger = require('./../utils/logger')('Controllers:CoursesController');
 const getCourses = asyncHandler(
    async (req, res) => {
       const { bootcampId } = req.params;
-      let query;
 
       if (bootcampId) {
-         query = CourseModel.find({ bootcamp: bootcampId });
-      } else {
-         query = CourseModel.find().populate({
-            path: 'bootcamp',
-            select: 'name description',
+         const foundCourses = await CourseModel.find({ bootcamp: bootcampId });
+
+         return res.status(200).json({
+            success: true,
+            count: foundCourses.length,
+            data: foundCourses,
          });
       }
 
-      const foundCourses = await query;
-
-      res.status(200).json({
-         success: true,
-         count: foundCourses.length,
-         data: foundCourses,
-      });
+      res.status(200).json(res.advancedResults);
    },
    logger,
    '@getCourses() [error: %s]'.red,
