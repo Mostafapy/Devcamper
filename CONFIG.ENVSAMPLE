@@ -1,0 +1,15 @@
+NODE_ENV=<Value>
+PORT=<Value>
+
+MONGO_URI=<Value>
+
+GEOCODER_PROVIDER=<Value> #Note: value must be mapquest
+
+GEOCODER_API_KEY=<Value>
+
+FILE_UPLOAD_PATH=<Value>
+
+MAX_FILE_UPLOAD_SIZE=<Value>
+
+JWT_SECRET=<Value>
+JWT_EXPIRE=<Value>
