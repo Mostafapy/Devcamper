@@ -16,14 +16,17 @@ const register = asyncHandler(
       const { name, email, password, role } = req.body;
 
       // Create new user
-      const createdUser = await UserModel.create({
+      await UserModel.create({
          name,
          email,
          password,
          role,
       });
 
-      res.status(200).json({ success: true, data: createdUser });
+      // Create token
+      const token = UserModel.getSignedJwtToken();
+
+      res.status(200).json({ success: true, token });
    },
    logger,
    '@register() [error: %s]'.red,
