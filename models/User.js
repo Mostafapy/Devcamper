@@ -1,5 +1,9 @@
 /* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+
+/** Middlewares */
+const encryptPassword = require('../middlewares/passwordEncryption');
 
 const UserSchema = new mongoose.Schema({
    name: {
@@ -34,4 +38,14 @@ const UserSchema = new mongoose.Schema({
    },
 });
 
+// Encrypt password using bycrypt
+encryptPassword(UserSchema);
+
+// Sign jwt and return
+// eslint-disable-next-line func-names
+UserSchema.methods.getSignedJwtToken = function() {
+   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+   });
+};
 module.exports = mongoose.model('User', UserSchema);
