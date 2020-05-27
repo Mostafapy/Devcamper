@@ -4,6 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const fileupload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
 
 const logger = require('./utils/logger')('Server');
 
@@ -25,6 +26,9 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'development') {
    app.use(
