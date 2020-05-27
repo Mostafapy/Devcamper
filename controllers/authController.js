@@ -75,7 +75,7 @@ const login = asyncHandler(
          );
       }
 
-      // Get token fron DB, Create Cookie and Send it in response
+      // Get token from DB, Create Cookie and Send it in response
       const { token, options } = setTokenWithOptionsForCookie();
 
       res.status(200)
