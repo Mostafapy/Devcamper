@@ -1,6 +1,9 @@
+/* eslint-disable no-return-await */
+/* eslint-disable func-names */
 /* eslint-disable no-useless-escape */
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 /** Middlewares */
 const encryptPassword = require('../middlewares/passwordEncryption');
@@ -42,10 +45,14 @@ const UserSchema = new mongoose.Schema({
 encryptPassword(UserSchema);
 
 // Sign jwt and return
-// eslint-disable-next-line func-names
 UserSchema.methods.getSignedJwtToken = function() {
    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
    });
+};
+
+// Match the entered password to the hashed password in the database
+UserSchema.methods.matchPassword = async function(enteredPassword) {
+   return await bcrypt.compare(enteredPassword, this.password);
 };
 module.exports = mongoose.model('User', UserSchema);
