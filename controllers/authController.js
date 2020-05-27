@@ -3,8 +3,9 @@ require('colors');
 /* Models */
 const UserModel = require('./../models/User');
 
-// const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
+
+const setTokenWithOptionsForCookie = require('./../helpers/setTokenWithOptionsForCookie');
 
 const logger = require('./../utils/logger')('Controllers:AuthController');
 const ErrorResponse = require('./../utils/errorResponse');
@@ -73,10 +74,13 @@ const login = asyncHandler(
                .red,
          );
       }
-      // Create token
-      const token = UserModel.getSignedJwtToken();
 
-      res.status(200).json({ success: true, token });
+      // Get token fron DB, Create Cookie and Send it in response
+      const { token, options } = setTokenWithOptionsForCookie();
+
+      res.status(200)
+         .cookie('token', token, options)
+         .json({ success: true, token });
    },
    logger,
    '@login() [error: %s]'.red,
