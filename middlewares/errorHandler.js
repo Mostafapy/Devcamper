@@ -1,4 +1,4 @@
-const ErrorResposne = require('./../utils/errorResponse');
+const ErrorResponse = require('./../utils/errorResponse');
 /**
  * Middleware to handle errors of Asynchronous
  * @param err
@@ -20,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
 
       const message = `Bootcamp not found with id of ${err.value}`;
 
-      customError = new ErrorResposne(message, 404, logger, loggerMessage);
+      customError = new ErrorResponse(message, 404, logger, loggerMessage);
    }
 
    // Mongoose Duplicate Key Error
@@ -31,7 +31,7 @@ const errorHandler = (err, req, res, next) => {
 
       const message = 'Duplicate field value entered';
 
-      customError = new ErrorResposne(message, 400, logger, loggerMessage);
+      customError = new ErrorResponse(message, 400, logger, loggerMessage);
    }
 
    // Mongoose Validation error
@@ -43,7 +43,7 @@ const errorHandler = (err, req, res, next) => {
       // eslint-disable-next-line implicit-arrow-linebreak
       const message = Object.values(err.errors).map(val => val.message);
 
-      customError = new ErrorResposne(message, 400, logger, loggerMessage);
+      customError = new ErrorResponse(message, 400, logger, loggerMessage);
    }
 
    const { logger, loggerMessage } = customError.loggerObject;
