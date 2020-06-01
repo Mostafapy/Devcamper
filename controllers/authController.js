@@ -86,4 +86,27 @@ const login = asyncHandler(
    '@login() [error: %s]'.red,
 );
 
-module.exports = { register, login };
+// @desc Get The Current Login User
+// @route GET /api/v1/auth/me
+// @access Private
+
+const getMe = asyncHandler(
+   async (req, res, next) => {
+      // Check for user
+      const user = await UserModel.findById(req.user.id);
+
+      if (!user) {
+         return next(
+            new ErrorResponse('Invalid Credentials'),
+            401,
+            logger,
+            '@login() [error: User is not found]'.red,
+         );
+      }
+
+      res.status(200).json({ success: true, data: user });
+   },
+   logger,
+   '@getMe() [error: %s]'.red,
+);
+module.exports = { register, login, getMe };
