@@ -8,6 +8,7 @@ const BootcampModel = require('./../models/Bootcamp');
 const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
 const checkUserRoleForPublishingBootcamp = require('./../middlewares/checkRoleForPublishingBootcamp');
+const bootcampOwnership = require('./../middlewares/bootcampOwnership');
 
 const geocoder = require('./../utils/geocoder');
 
@@ -78,14 +79,7 @@ const createBootcamp = asyncHandler(
 // @access Private
 const updateBootcampById = asyncHandler(
    async (req, res, next) => {
-      const bootcamp = await BootcampModel.findByIdAndUpdate(
-         req.params.id,
-         req.body,
-         {
-            new: true,
-            runValidators: true,
-         },
-      );
+      const bootcamp = await BootcampModel.findById(req.params.id);
 
       // bootcamp doesn't exist
       if (!bootcamp) {
@@ -99,6 +93,17 @@ const updateBootcampById = asyncHandler(
          );
       }
 
+      // Make sure user is the bootcamp owner
+      bootcampOwnership(bootcamp);
+      
+      await bootcamp.update(
+         req.body,
+         {
+            new: true,
+            runValidators: true,
+         }
+      );
+      
       res.status(200).json({
          success: true,
          data: bootcamp,
@@ -126,6 +131,9 @@ const deleteBootcampById = asyncHandler(
             ),
          );
       }
+
+      // Make sure user is the bootcamp owner
+      bootcampOwnership(bootcamp);
 
       bootcamp.remove();
 
@@ -190,6 +198,9 @@ const bootcampPhotoUpload = asyncHandler(
          );
       }
 
+      // Make sure user is the bootcamp owner
+      bootcampOwnership(bootcamp);
+      
       if (!req.files) {
          return next(
             new ErrorResponse(
