@@ -5,6 +5,7 @@ const BootcampModel = require('./../models/Bootcamp');
 /* Middlewares */
 const advancedResults = require('./../middlewares/advancedResults');
 const authProtect = require('./../middlewares/authProtect');
+const roleAuthorization = require('./../middlewares/roleAuthorization');
 
 /* Controllers */
 const {
@@ -28,15 +29,15 @@ router.use('/:bootcampId/courses', coursesRouter);
 router
    .route('/')
    .get(advancedResults(BootcampModel, 'courses'), getBootcamps)
-   .post(authProtect, createBootcamp);
+   .post(authProtect, roleAuthorization('publisher', 'admin'), createBootcamp);
 
-router.route('/:id/photo').put(authProtect, bootcampPhotoUpload);
+router.route('/:id/photo').put(authProtect, roleAuthorization('publisher', 'admin'), bootcampPhotoUpload);
 
 router
    .route('/:id')
    .get(getBootcampById)
-   .put(authProtect, updateBootcampById)
-   .delete(authProtect, deleteBootcampById);
+   .put(authProtect, roleAuthorization('publisher', 'admin'), updateBootcampById)
+   .delete(authProtect, roleAuthorization('publisher', 'admin'), deleteBootcampById);
 
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 
