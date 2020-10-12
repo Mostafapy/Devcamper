@@ -47,7 +47,7 @@ const authProtect = asyncHandler(
             new ErrorResponse('Not authorized for that route'),
             401,
             logger,
-            `@authProtect() [error: ${err.stack}]`.red,
+            `@authProtect() [error: %s]`.red,
          );
       }
    },
