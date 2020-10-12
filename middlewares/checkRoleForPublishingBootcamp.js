@@ -18,7 +18,7 @@ const checkUserRoleForPublishingBootcamp =  asyncHandler(
                `The user with ID ${req.user.id} has already published a bootcamp`,
                400,
                logger,
-               '@checkUserRoleForPublishingBootcamp() [error: user has already published a bootcamp]'.red,
+               '@checkUserRoleForPublishingBootcamp() [error: %s]'.red,
             ),
          );
       }
