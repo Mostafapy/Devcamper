@@ -1,8 +1,14 @@
 require('colors');
 const path = require('path');
+
+/** Models */
 const BootcampModel = require('./../models/Bootcamp');
+
+/** Middlewares */
 const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
+const checkUserRoleForPublishingBootcamp = require('./../middlewares/checkRoleForPublishingBootcamp');
+
 const geocoder = require('./../utils/geocoder');
 
 const logger = require('./../utils/logger')('Controllers:BootcampsController');
@@ -54,21 +60,8 @@ const createBootcamp = asyncHandler(
       // Add user to request body
       req.body.user = req.user.id;
 
-      // Check for published bootcamp
-      const publishedBootcamp =  await BootcampModel.findOne({ user: req.body.user });
-
-      // If the user is not admin, they can only add one bootcamp
-      if (publishedBootcamp && req.user.role !== 'admin') {
-         return next(
-            new ErrorResponse(
-               `The user with ID ${req.user.id} has already published a bootcamp`,
-               400,
-               logger,
-               '@updateBootcampById() [error: user has already published a bootcamp]'.red,
-            ),
-         );
-      }
-
+      await checkUserRoleForPublishingBootcamp();
+      
       const newBootcamp = await BootcampModel.create(req.body);
 
       res.status(201).json({
