@@ -47,7 +47,7 @@ const authProtect = asyncHandler(
             new ErrorResponse('Not authorized for that route'),
             401,
             logger,
-            '@authProtect() [error: Token does not exist]'.red,
+            `@authProtect() [error: ${err.stack}]`.red,
          );
       }
    },
