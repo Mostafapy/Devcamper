@@ -8,7 +8,7 @@ const BootcampModel = require('./../models/Bootcamp');
 const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
 const checkUserRoleForPublishingBootcamp = require('./../middlewares/checkRoleForPublishingBootcamp');
-const bootcampOwnership = require('./../middlewares/bootcampOwnership');
+const bootcampOrCourseOwnership = require('../middlewares/bootcampOrCourseOwnership');
 
 const geocoder = require('./../utils/geocoder');
 
@@ -94,7 +94,7 @@ const updateBootcampById = asyncHandler(
       }
 
       // Make sure user is the bootcamp owner
-      bootcampOwnership(bootcamp);
+      bootcampOrCourseOwnership(bootcamp);
       
       await bootcamp.update(
          req.body,
@@ -133,7 +133,7 @@ const deleteBootcampById = asyncHandler(
       }
 
       // Make sure user is the bootcamp owner
-      bootcampOwnership(bootcamp);
+      bootcampOrCourseOwnership(bootcamp);
 
       bootcamp.remove();
 
@@ -199,7 +199,7 @@ const bootcampPhotoUpload = asyncHandler(
       }
 
       // Make sure user is the bootcamp owner
-      bootcampOwnership(bootcamp);
+      bootcampOrCourseOwnership(bootcamp);
       
       if (!req.files) {
          return next(
