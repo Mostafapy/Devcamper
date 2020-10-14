@@ -3,8 +3,10 @@ require('colors');
 const CourseModel = require('./../models/Course');
 const BootcampModel = require('../models/Bootcamp');
 
+/* Middlewares */
 const ErrorResponse = require('./../utils/errorResponse');
 const asyncHandler = require('./../middlewares/asyncHandler');
+const bootcampOrCourseOwnership = require('../middlewares/bootcampOrCourseOwnership');
 
 const logger = require('./../utils/logger')('Controllers:CoursesController');
 
@@ -84,6 +86,9 @@ const addCourse = asyncHandler(
          );
       }
 
+      // Make sure user is the bootcamp owner
+      bootcampOrCourseOwnership(bootcamp);
+
       const newCourse = await CourseModel.create(req.body);
 
       res.status(201).json({
@@ -113,6 +118,9 @@ const updateCourseById = asyncHandler(
             ),
          );
       }
+
+     // Make sure user is the bootcamp owner
+     bootcampOrCourseOwnership(course);
 
       course = await CourseModel.findByIdAndUpdate(req.params.id, req.body, {
          new: true,
@@ -147,6 +155,9 @@ const deleteCourseById = asyncHandler(
          );
       }
 
+      // Make sure user is the bootcamp owner
+      bootcampOrCourseOwnership(bootcamp);
+      
       await course.remove();
 
       res.status(200).json({
