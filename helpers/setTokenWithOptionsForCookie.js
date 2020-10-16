@@ -1,5 +1,5 @@
 /* Models */
-const UserModel = require('./../models/User');
+const UserModel = require('../models/User');
 
 const setTokenWithOptionsForCookie = () => {
    // Create token

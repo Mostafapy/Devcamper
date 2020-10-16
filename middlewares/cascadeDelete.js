@@ -1,5 +1,5 @@
 require('colors');
-const logger = require('./../utils/logger')('Middlewares:CascadeDelete');
+const logger = require('../utils/logger')('Middlewares:CascadeDelete');
 /**
  *  Middleware to cascade delete process of relational collections in mongoDB
  * @param {Object} modelSchema

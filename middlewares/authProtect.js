@@ -2,11 +2,11 @@ require('colors');
 const jwt = require('jsonwebtoken');
 
 const asyncHandler = require('./asyncHandler');
-const ErrorResponse = require('./../utils/errorResponse');
+const ErrorResponse = require('../utils/errorResponse');
 
-const UserModel = require('./../models/User');
+const UserModel = require('../models/User');
 
-const logger = require('./../utils/logger')('Middlewares:AuthProtect');
+const logger = require('../utils/logger')('Middlewares:AuthProtect');
 
 const authProtect = asyncHandler(
    async (req, res, next) => {
@@ -47,7 +47,7 @@ const authProtect = asyncHandler(
             new ErrorResponse('Not authorized for that route'),
             401,
             logger,
-            `@authProtect() [error: %s]`.red,
+            '@authProtect() [error: %s]'.red,
          );
       }
    },

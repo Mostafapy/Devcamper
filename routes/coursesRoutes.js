@@ -31,6 +31,10 @@ router
    .route('/:id')
    .get(getCourseById)
    .put(authProtect, roleAuthorization('publisher', 'admin'), updateCourseById)
-   .delete(authProtect, roleAuthorization('publisher', 'admin'), deleteCourseById);
+   .delete(
+      authProtect,
+      roleAuthorization('publisher', 'admin'),
+      deleteCourseById,
+   );
 
 module.exports = router;

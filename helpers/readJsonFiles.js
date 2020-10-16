@@ -2,7 +2,7 @@ require('colors');
 const { promisify } = require('util');
 const fs = require('fs');
 
-const logger = require('./../utils/logger')('Helpers:ReadJsonFiles');
+const logger = require('../utils/logger')('Helpers:ReadJsonFiles');
 
 /**
  * Helper Function to read JSON files asynchronously

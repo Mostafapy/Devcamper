@@ -31,13 +31,27 @@ router
    .get(advancedResults(BootcampModel, 'courses'), getBootcamps)
    .post(authProtect, roleAuthorization('publisher', 'admin'), createBootcamp);
 
-router.route('/:id/photo').put(authProtect, roleAuthorization('publisher', 'admin'), bootcampPhotoUpload);
+router
+   .route('/:id/photo')
+   .put(
+      authProtect,
+      roleAuthorization('publisher', 'admin'),
+      bootcampPhotoUpload,
+   );
 
 router
    .route('/:id')
    .get(getBootcampById)
-   .put(authProtect, roleAuthorization('publisher', 'admin'), updateBootcampById)
-   .delete(authProtect, roleAuthorization('publisher', 'admin'), deleteBootcampById);
+   .put(
+      authProtect,
+      roleAuthorization('publisher', 'admin'),
+      updateBootcampById,
+   )
+   .delete(
+      authProtect,
+      roleAuthorization('publisher', 'admin'),
+      deleteBootcampById,
+   );
 
 router.route('/radius/:zipcode/:distance').get(getBootcampsInRadius);
 

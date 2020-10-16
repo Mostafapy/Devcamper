@@ -2,7 +2,7 @@
 require('colors');
 const mongoose = require('mongoose');
 
-const logger = require('./../utils/logger')('Models:Course');
+const logger = require('../utils/logger')('Models:Course');
 
 const getAverageCostOfCourse = require('../helpers/getAverageCostOfCourse');
 

@@ -119,8 +119,8 @@ const updateCourseById = asyncHandler(
          );
       }
 
-     // Make sure user is the bootcamp owner
-     bootcampOrCourseOwnership(course);
+      // Make sure user is the bootcamp owner
+      bootcampOrCourseOwnership(course);
 
       course = await CourseModel.findByIdAndUpdate(req.params.id, req.body, {
          new: true,
@@ -157,7 +157,7 @@ const deleteCourseById = asyncHandler(
 
       // Make sure user is the bootcamp owner
       bootcampOrCourseOwnership(bootcamp);
-      
+
       await course.remove();
 
       res.status(200).json({

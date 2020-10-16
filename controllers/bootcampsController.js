@@ -62,7 +62,7 @@ const createBootcamp = asyncHandler(
       req.body.user = req.user.id;
 
       await checkUserRoleForPublishingBootcamp();
-      
+
       const newBootcamp = await BootcampModel.create(req.body);
 
       res.status(201).json({
@@ -95,15 +95,12 @@ const updateBootcampById = asyncHandler(
 
       // Make sure user is the bootcamp owner
       bootcampOrCourseOwnership(bootcamp);
-      
-      await bootcamp.update(
-         req.body,
-         {
-            new: true,
-            runValidators: true,
-         }
-      );
-      
+
+      await bootcamp.update(req.body, {
+         new: true,
+         runValidators: true,
+      });
+
       res.status(200).json({
          success: true,
          data: bootcamp,
@@ -200,7 +197,7 @@ const bootcampPhotoUpload = asyncHandler(
 
       // Make sure user is the bootcamp owner
       bootcampOrCourseOwnership(bootcamp);
-      
+
       if (!req.files) {
          return next(
             new ErrorResponse(

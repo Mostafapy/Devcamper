@@ -1,14 +1,14 @@
 /* eslint-disable object-curly-newline */
 require('colors');
 /* Models */
-const UserModel = require('./../models/User');
+const UserModel = require('../models/User');
 
-const asyncHandler = require('./../middlewares/asyncHandler');
+const asyncHandler = require('../middlewares/asyncHandler');
 
-const setTokenWithOptionsForCookie = require('./../helpers/setTokenWithOptionsForCookie');
+const setTokenWithOptionsForCookie = require('../helpers/setTokenWithOptionsForCookie');
 
-const logger = require('./../utils/logger')('Controllers:AuthController');
-const ErrorResponse = require('./../utils/errorResponse');
+const logger = require('../utils/logger')('Controllers:AuthController');
+const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Register User
 // @route POST /api/v1/auth/register
@@ -130,6 +130,7 @@ const forgetPassword = asyncHandler(
       }
 
       // Get reset token
+      // eslint-disable-next-line no-unused-vars
       const resetToken = user.getResetPasswordToken();
 
       await user.save({ validateBeforeSave: false });

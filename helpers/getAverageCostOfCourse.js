@@ -1,6 +1,6 @@
 require('colors');
 
-const logger = require('./../utils/logger')('Helpers:GetAverageCostOfCourse');
+const logger = require('../utils/logger')('Helpers:GetAverageCostOfCourse');
 
 // eslint-disable-next-line func-names
 module.exports = async function(bootcampId) {
