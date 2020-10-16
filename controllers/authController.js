@@ -100,7 +100,7 @@ const getMe = asyncHandler(
             new ErrorResponse('Invalid Credentials'),
             401,
             logger,
-            '@login() [error: User is not found]'.red,
+            '@getMe() [error: User is not found]'.red,
          );
       }
 
@@ -109,4 +109,35 @@ const getMe = asyncHandler(
    logger,
    '@getMe() [error: %s]'.red,
 );
-module.exports = { register, login, getMe };
+
+// @desc Forget Password
+// @route GET /api/v1/auth/forgetpassword
+// @access Private
+
+const forgetPassword = asyncHandler(
+   async (req, res, next) => {
+      const { email } = req.body;
+      // Check for user by email
+      const user = await UserModel.findOne({ email });
+
+      if (!user) {
+         return next(
+            new ErrorResponse('Invalid Credentials'),
+            401,
+            logger,
+            '@forgetPassword() [error: User is not found with that eamil]'.red,
+         );
+      }
+
+      // Get reset token
+      const resetToken = user.getResetPasswordToken();
+
+      await user.save({ validateBeforeSave: false });
+
+      res.status(200).json({ success: true, data: user });
+   },
+   logger,
+   '@getMe() [error: %s]'.red,
+);
+
+module.exports = { register, login, getMe, forgetPassword };
