@@ -10,6 +10,8 @@ const setTokenWithOptionsForCookie = require('../helpers/setTokenWithOptionsForC
 const logger = require('../utils/logger')('Controllers:AuthController');
 const ErrorResponse = require('../utils/errorResponse');
 
+const sendEmail = require('../utils/sendEmail');
+
 // @desc Register User
 // @route POST /api/v1/auth/register
 // @access Public
@@ -130,15 +132,46 @@ const forgetPassword = asyncHandler(
       }
 
       // Get reset token
-      // eslint-disable-next-line no-unused-vars
       const resetToken = user.getResetPasswordToken();
 
       await user.save({ validateBeforeSave: false });
 
-      res.status(200).json({ success: true, data: user });
+      // Create reset url
+      const resetURL = `${req.protocol}://${req.get(
+         'host',
+      )}/api/v1/auth/resetPassword/${resetToken}`;
+
+      const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n \n ${resetURL}`;
+
+      try {
+         await sendEmail({
+            email: user.email,
+            subject: 'Password reset token',
+            message,
+         });
+      } catch (err) {
+         logger.error('@forgetPassword() [error: %s]'.red, err.message);
+
+         user.resetPasswordToken = undefined;
+         user.resetPasswordTokenxpire = undefined;
+
+         await user.save({ validateBeforeSave: false });
+
+         return next(
+            new ErrorResponse('Email cannot be sent'),
+            500,
+            logger,
+            '@login() [error: Email cannot be sent]'.red,
+         );
+      }
+
+      res.status(200).json({
+         success: true,
+         data: { msg: 'message sent successfully' },
+      });
    },
    logger,
-   '@getMe() [error: %s]'.red,
+   '@forgetPassword() [error: %s]'.red,
 );
 
 module.exports = { register, login, getMe, forgetPassword };
