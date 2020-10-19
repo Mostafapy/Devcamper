@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 class ErrorResponse extends Error {
    constructor(message, statusCode, logger, loggerMessage) {
       super(message);
