@@ -1,5 +1,6 @@
 /* eslint-disable object-curly-newline */
 require('colors');
+const crypto = require('crypto');
 /* Models */
 const UserModel = require('../models/User');
 
@@ -153,7 +154,7 @@ const forgetPassword = asyncHandler(
          logger.error('@forgetPassword() [error: %s]'.red, err.message);
 
          user.resetPasswordToken = undefined;
-         user.resetPasswordTokenxpire = undefined;
+         user.resetPasswordExpire = undefined;
 
          await user.save({ validateBeforeSave: false });
 
@@ -174,4 +175,48 @@ const forgetPassword = asyncHandler(
    '@forgetPassword() [error: %s]'.red,
 );
 
-module.exports = { register, login, getMe, forgetPassword };
+// @desc Reset password
+// @route PUT /api/v1/auth/resetPassword/:resetToken
+// @access Private
+
+const resetPassword = asyncHandler(
+   async (req, res, next) => {
+      // Get hashed token
+      const resetPasswordToken = crypto
+         .createHash('sha256')
+         .update(req.params.resetToken)
+         .digest('hex');
+
+      const user = await UserModel.findOne({
+         resetPasswordToken,
+         resetPasswordExpire: { $gt: Date.now() },
+      });
+
+      if (!user) {
+         return next(
+            new ErrorResponse('Invalid Credentials'),
+            401,
+            logger,
+            '@resetPassword() [error: User is not found]'.red,
+         );
+      }
+
+      // Set new password
+      user.password = req.body.newPassword;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save();
+
+      // Get token from DB, Create Cookie and Send it in response
+      const { token, options } = setTokenWithOptionsForCookie();
+
+      res.status(200)
+         .cookie('token', token, options)
+         .json({ success: true, token });
+   },
+   logger,
+   '@getMe() [error: %s]'.red,
+);
+
+module.exports = { register, login, getMe, forgetPassword, resetPassword };
