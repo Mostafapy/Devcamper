@@ -115,7 +115,7 @@ const getMe = asyncHandler(
 
 // @desc Forget Password
 // @route GET /api/v1/auth/forgetpassword
-// @access Private
+// @access Public
 
 const forgetPassword = asyncHandler(
    async (req, res, next) => {
@@ -177,7 +177,7 @@ const forgetPassword = asyncHandler(
 
 // @desc Reset password
 // @route PUT /api/v1/auth/resetPassword/:resetToken
-// @access Private
+// @access Public
 
 const resetPassword = asyncHandler(
    async (req, res, next) => {
@@ -216,7 +216,76 @@ const resetPassword = asyncHandler(
          .json({ success: true, token });
    },
    logger,
-   '@getMe() [error: %s]'.red,
+   '@resetPassword() [error: %s]'.red,
 );
 
-module.exports = { register, login, getMe, forgetPassword, resetPassword };
+// @desc Update user details
+// @route PUT /api/v1/auth/updateUserDetails
+// @access Private
+
+const updateUserDetails = asyncHandler(
+   async (req, res, next) => {
+      const { name, email } = req.body;
+
+      // Check for user
+      const user = await UserModel.findById(req.user.id);
+
+      if (!user) {
+         return next(
+            new ErrorResponse('Invalid Credentials'),
+            401,
+            logger,
+            '@updateUserDetails() [error: User is not found]'.red,
+         );
+      }
+
+      await user.update({ name, email }, { new: true, runValidators: true });
+      res.status(200).json({ success: true, data: user });
+   },
+   logger,
+   '@updateUserDetails() [error: %s]'.red,
+);
+
+// @desc Update password
+// @route PUT /api/v1/auth/updatePassword
+// @access Private
+
+const updatePassword = asyncHandler(
+   async (req, res, next) => {
+      const { currentPassword, newPassword } = req.body;
+
+      // Check for user
+      const user = await UserModel.findById(req.user.id).select('+password');
+
+      if (!(await user.matchPassword(currentPassword))) {
+         return next(
+            new ErrorResponse('Invalid Credentials'),
+            401,
+            logger,
+            '@updateUserDetails() [error: Password is not correct not matched]'
+               .red,
+         );
+      }
+
+      user.password = newPassword;
+
+      // Get token from DB, Create Cookie and Send it in response
+      const { token, options } = setTokenWithOptionsForCookie();
+
+      res.status(200)
+         .cookie('token', token, options)
+         .json({ success: true, token });
+   },
+   logger,
+   '@updateUserDetails() [error: %s]'.red,
+);
+
+module.exports = {
+   register,
+   login,
+   getMe,
+   forgetPassword,
+   resetPassword,
+   updateUserDetails,
+   updatePassword,
+};
