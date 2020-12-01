@@ -1,7 +1,7 @@
 require('colors');
 const mongoose = require('mongoose');
-const mongoDBConnectionHelper = require('./../helpers/mongoDBConnection');
-const logger = require('./../utils/logger')('Config:DB');
+const mongoDBConnectionHelper = require('../helpers/mongoDBConnection');
+const logger = require('../utils/logger')('Config:DB');
 
 const connectDB = async () => {
    // For nodemon restarts
