@@ -1,14 +1,14 @@
 require('colors');
 /* Models */
-const CourseModel = require('./../models/Course');
+const CourseModel = require('../models/Course');
 const BootcampModel = require('../models/Bootcamp');
 
 /* Middlewares */
-const ErrorResponse = require('./../utils/errorResponse');
-const asyncHandler = require('./../middlewares/asyncHandler');
+const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middlewares/asyncHandler');
 const bootcampOrCourseOwnership = require('../middlewares/bootcampOrCourseOwnership');
 
-const logger = require('./../utils/logger')('Controllers:CoursesController');
+const logger = require('../utils/logger')('Controllers:CoursesController');
 
 // @desc Get courses
 // @route GET /api/v1/courses
@@ -156,7 +156,7 @@ const deleteCourseById = asyncHandler(
       }
 
       // Make sure user is the bootcamp owner
-      bootcampOrCourseOwnership(bootcamp);
+      bootcampOrCourseOwnership(course);
 
       await course.remove();
 

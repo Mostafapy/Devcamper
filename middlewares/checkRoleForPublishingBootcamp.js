@@ -1,7 +1,7 @@
 const asyncHandler = require('./asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
 
-const UserModel = require('../models/User');
+const BootcampModel = require('../models/Bootcamp');
 
 const logger = require('../utils/logger')(
    'Middlewares:CheckUserRoleForPublishingBootcamp',
