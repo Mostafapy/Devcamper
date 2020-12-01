@@ -8,7 +8,7 @@ const logger = require('../utils/logger')('Controllers:UserController');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc Get all users
-// @route GET /api/v1/auth/users
+// @route GET /api/v1/users
 // @access Private/admin
 const getAllUsers = asyncHandler(
    async (req, res) => {
@@ -19,7 +19,7 @@ const getAllUsers = asyncHandler(
 );
 
 // @desc Get Single User
-// @route GET /api/v1/auth/users/:id
+// @route GET /api/v1/users/:id
 // @access Private
 const getUser = asyncHandler(
    async (req, res, next) => {
@@ -42,7 +42,7 @@ const getUser = asyncHandler(
 );
 
 // @desc Create User
-// @route POST /api/v1/auth/users
+// @route POST /api/v1/users
 // @access Private
 const createUser = asyncHandler(
    async (req, res) => {
@@ -55,7 +55,7 @@ const createUser = asyncHandler(
 );
 
 // @desc Update User
-// @route PUT /api/v1/auth/users/:id
+// @route PUT /api/v1/users/:id
 // @access Private
 const updateUser = asyncHandler(
    async (req, res) => {
@@ -72,7 +72,7 @@ const updateUser = asyncHandler(
 );
 
 // @desc Delete User
-// @route DELETE /api/v1/auth/users/:id
+// @route DELETE /api/v1/users/:id
 // @access Private
 const deleteUser = asyncHandler(
    async (req, res) => {
