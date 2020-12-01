@@ -1,11 +1,11 @@
 const express = require('express');
 /* DB Model */
-const BootcampModel = require('./../models/Bootcamp');
+const BootcampModel = require('../models/Bootcamp');
 
 /* Middlewares */
-const advancedResults = require('./../middlewares/advancedResults');
-const authProtect = require('./../middlewares/authProtect');
-const roleAuthorization = require('./../middlewares/roleAuthorization');
+const advancedResults = require('../middlewares/advancedResults');
+const authProtect = require('../middlewares/authProtect');
+const roleAuthorization = require('../middlewares/roleAuthorization');
 
 /* Controllers */
 const {
